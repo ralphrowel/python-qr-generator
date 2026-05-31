@@ -1,5 +1,7 @@
-from tkinter import *
 import tkinter as tk
+from tkinter import messagebox
+from core.generator import generate_qr
+
 
 class QRApp:
 
@@ -11,20 +13,38 @@ class QRApp:
         self.main_frame = tk.Frame(root, padx=20, pady=20)
         self.main_frame.pack(fill="both", expand=True)
 
-        self.label = tk.Label(self.main_frame, text="Enter Text or URL:")
+        self.label = tk.Label(
+            self.main_frame,
+            text="Enter Text or URL:"
+        )
         self.label.grid(row=0, column=0, sticky="w", pady=(0, 10))
 
-        self.entry = tk.Entry(self.main_frame, width=40)
+        self.entry = tk.Entry(
+            self.main_frame,
+            width=40
+        )
         self.entry.grid(row=1, column=0, padx=5, pady=5)
 
-        self.button = tk.Button(self.main_frame, text="Generate QR")
+        self.button = tk.Button(
+            self.main_frame,
+            text="Generate QR",
+            command=self.generate
+        )
         self.button.grid(row=2, column=0, pady=15)
-        self.button.config(command=self.generate)
 
     def generate(self):
-        source = self.entry.get()
-        print(source)
+        source = self.entry.get().strip()
 
-root = tk.Tk()
-app = QRApp(root)
-root.mainloop()
+        if not source:
+            messagebox.showerror(
+                "Error",
+                "Please enter text or a URL."
+            )
+            return
+
+        filename = generate_qr(source)
+
+        messagebox.showinfo(
+            "Success",
+            f"QR code saved as {filename}"
+        )
