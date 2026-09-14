@@ -37,13 +37,24 @@ def _escape_wifi(value: str) -> str:
     return value
 
 
-def format_vcard(name: str, phone: str, email: str, website: str) -> str:
+def format_vcard(
+    name: str,
+    phone: str = "",
+    email: str = "",
+    website: str = "",
+    org: str = "",
+    title: str = "",
+) -> str:
     """Format a vCard 3.0 QR string."""
     lines = [
         "BEGIN:VCARD",
         "VERSION:3.0",
         f"FN:{name}",
     ]
+    if org:
+        lines.append(f"ORG:{org}")
+    if title:
+        lines.append(f"TITLE:{title}")
     if phone:
         lines.append(f"TEL:{phone}")
     if email:
